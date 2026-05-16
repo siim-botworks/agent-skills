@@ -23,11 +23,13 @@ If the user gives no hints, choose a conservative default:
 
 Confirm that the current Codex session has an available sub-agent mechanism. Use that mechanism to create each reviewer as a fresh independent agent. If no sub-agent mechanism is available, disclose that the skill cannot run as designed and ask whether to continue with a weaker self-review or manual review instead.
 
+Do not fork or copy the main agent's conversation history into the reviewer. The reviewer must start from a compact, deliberately written brief, because the point of this skill is independent review without inheriting the main agent's prior assumptions, attempted solutions, or confidence in its own changes.
+
 ## Workflow
 
 1. Inspect the work locally enough to identify the issue number or write a concise task summary, changed scope, and already-passing checks.
-2. Spawn one fresh sub-agent for review. Do not reuse an earlier reviewer for later passes.
-3. Give the reviewer only the compact context it needs: issue number or short task summary, changed scope, passing checks, and focus hints. Ask for findings only, ordered by severity, with file and line references where possible.
+2. Spawn one fresh sub-agent for review without forking the current conversation. Do not reuse an earlier reviewer for later passes.
+3. Give the reviewer only the compact context it needs: issue number or short task summary, changed scope, passing checks, and focus hints. Do not include chat history, implementation rationale beyond what is needed to review the result, or the main agent's prior conclusions. Ask for findings only, ordered by severity, with file and line references where possible.
 4. While the reviewer runs, only do non-code work, validation, or inspection unless the code work is unrelated to the reviewed scope. Include any code changes made during review in the next fresh review pass.
 5. When the reviewer returns, assess every finding. Treat sub-agent output as advice, not authority.
 6. Fix findings that are relevant and materially improve the code. Reject findings only when they are wrong, already handled, outside scope, or the tradeoff is explicitly justified. Do not quietly reject high-severity correctness, security, data-loss, or migration findings; fix them or disclose the decision and ask the user when appropriate.
@@ -42,6 +44,8 @@ Use a prompt like this, adapting details to the repository:
 
 ```text
 Review the current code changes as an independent reviewer.
+
+You are receiving a compact review brief, not the main agent's conversation history. Treat the implementation as something to verify from the code and stated task, not from prior discussion.
 
 Context:
 - <issue number if sufficient, otherwise 1-3 sentence task summary>
