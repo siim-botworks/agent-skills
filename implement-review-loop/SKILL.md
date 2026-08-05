@@ -11,7 +11,8 @@ The argument is the ticket: an issue tracker URL or ticket number, or a path to 
 ## Setup
 
 1. Read the ticket. If anything needs clarification, ask before you start.
-2. Confirm the reviewer with the user: which model reviews, and at which reasoning effort. Default: `gpt-5.6-sol` at `high`. Prefer a dynamic Workflow for reviewers when the harness supports it — it sets model and effort per reviewer. Skip the effort question when the chosen mechanism cannot set effort; say so instead of asking.
+2. Ask the user where to work: the current checkout, a new branch, or a worktree.
+3. Confirm the reviewer with the user: which model reviews, and at which reasoning effort. Default: `gpt-5.6-sol` at `high`. Prefer a dynamic Workflow for reviewers when the harness supports it — it sets model and effort per reviewer. Skip the effort question when the chosen mechanism cannot set effort; say so instead of asking.
 
 ## Implement
 
