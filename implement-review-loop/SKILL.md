@@ -14,6 +14,8 @@ The argument is the ticket: an issue tracker URL or ticket number, or a path to 
 2. Ask the user where to work: the current checkout, a new branch, or a worktree.
 3. Confirm the reviewer with the user: which model reviews, and at which reasoning effort. Default: `gpt-5.6-sol` at `high`. Prefer a dynamic Workflow for reviewers when the harness supports it — it sets model and effort per reviewer. Skip the effort question when the chosen mechanism cannot set effort; say so instead of asking.
 
+**Do not proceed with implementation until the above mechanics have been settled.**
+
 ## Implement
 
 Implement the ticket. Use the TDD skill where applicable. Run the project's validation (tests, lint, typecheck) and get it green, then commit — before the first review round.
