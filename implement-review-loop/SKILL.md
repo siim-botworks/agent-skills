@@ -10,10 +10,11 @@ The argument is the ticket: an issue tracker URL or ticket number, or a path to 
 
 ## Setup
 
-1. Read the ticket. Ask about anything that needs clarification.
-2. Ask the user where to work: the current checkout, a new branch, or a worktree.
-3. Pick the reviewer mechanism: named agents whose frontmatter carries the model and effort (e.g. `gpt-5.6-sol_high`); if no named agent exists for the model/effort pair, fall back to a dynamic Workflow — its `agent()` calls accept model and effort directly. Confirm with the user: which model, and — when the mechanism can set it — at which reasoning effort. Default: `gpt-5.6-sol` at `high`.
-4. Record the current `HEAD` as the **fixed point** for all review rounds.
+1. Before you read the ticket or explore, ask the user everything below in one message, skipping whatever the invocation already answered:
+   - Where to work: the current checkout, a new branch, or a worktree.
+   - The reviewer: which model, and — when the mechanism can set it — at which reasoning effort. Default: `gpt-5.6-sol` at `high`. Mechanism: named agents whose frontmatter carries the model and effort (e.g. `gpt-5.6-sol_high`); if no named agent exists for the model/effort pair, fall back to a dynamic Workflow — its `agent()` calls accept model and effort directly.
+2. Read the ticket. Ask about anything that needs clarification.
+3. Record the pre-implementation `HEAD` as the **fixed point**. Every review round diffs from it, so each round's reviewers see the full change, not just the latest fixes.
 
 **Settle all of the above before you start implementation.**
 
