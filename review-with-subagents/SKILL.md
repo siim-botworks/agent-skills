@@ -1,6 +1,7 @@
 ---
 name: review-with-subagents
 description: Iterative independent code review using fresh sub-agents. Use when Codex has made or is about to finalize code changes and the user asks for fresh-agent review, sub-agent review, an iterative review loop, "keep reviewing until clean", or wants review context such as a GitHub issue number, task description, reasoning effort, or focus areas passed to reviewers.
+disable-model-invocation: true
 ---
 
 Run a fresh sub-agent review loop over the current code changes, then assess and fix relevant findings before repeating. Stop only when a fresh reviewer reports no actionable findings, the remaining findings are intentionally rejected, or a practical limit is reached and disclosed.
