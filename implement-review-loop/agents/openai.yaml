@@ -1,0 +1,5 @@
+interface:
+  display_name: "Implement Review Loop"
+  short_description: "Implement a ticket with TDD, then fresh-reviewer rounds to convergence"
+policy:
+  allow_implicit_invocation: false

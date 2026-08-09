@@ -1,0 +1,3 @@
+interface:
+  display_name: "Review with Subagents"
+  short_description: "Iterative code review with fresh sub-agents until clean"

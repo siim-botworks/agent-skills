@@ -1,0 +1,5 @@
+interface:
+  display_name: "Herdr Orchestrate"
+  short_description: "Orchestrate worktree implementers and review loops into a stacked-PR spine"
+policy:
+  allow_implicit_invocation: false
