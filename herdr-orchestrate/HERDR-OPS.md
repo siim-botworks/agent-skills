@@ -19,7 +19,7 @@ A wait or a prompt's `--wait` timing out on long work is normal, not failure. Ch
 
 ## Fresh reviewer per round
 
-A reviewer pane may be reused; the reviewer *session* may not. Start a new conversation via the harness's own reset (in Codex, `/new`), confirm from the pane that the context actually reset, then send the round brief. Renaming the agent afterward is bookkeeping for your state table, not evidence of freshness. The round brief carries the fixed point, the scope, gates already green, earlier rounds' fixed/refuted list ("do not relitigate"), the report-file path to write, and the exact fallback sentence "No findings."
+A reviewer pane may be reused; the reviewer *session* may not. Start a new conversation via the harness's own reset (in Codex, `/new`), confirm from the pane that the context actually reset, then send the round brief — contents per the skill's Fresh-reviewer rule, plus the report-file path to write. Renaming the agent afterward is bookkeeping for your state table, not evidence of freshness.
 
 ## Blocked panes (approval policy)
 
