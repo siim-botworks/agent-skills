@@ -7,7 +7,7 @@ Opinionated rankings by the repo owner — edit to your own experience. Higher =
 | gpt-5.6-sol | 9    | 8            | 6     | Codex CLI (`codex`) |
 | sonnet-5    | 5    | 5            | 6     | Claude Code (`claude --model claude-sonnet-5`) |
 | opus-5      | 6    | 8            | 8     | Claude Code (`claude --model claude-opus-5`) |
-| fable-5     | 2    | 9            | 9     | Claude Code (`claude --model claude-fable-5`) |
+| fable-5     | 2    | 9            | 9     | Claude Code (`claude --model 'claude-fable-5[1m]'`) |
 
 Run every model in its native harness. Do not proxy one vendor's model through another vendor's harness.
 
@@ -16,8 +16,9 @@ Run every model in its native harness. Do not proxy one vendor's model through a
 - Bulk/mechanical implementation (clear spec, migrations, data plumbing): gpt-5.6-sol at medium.
 - Heavy grunt work where taste matters little but volume is large: gpt-5.6-sol at xhigh.
 - API design, domain modeling, anything user-facing (UI, copy): fable-5 at high, or taste ≥ 7.
-- Code review: gpt-5.6-sol at high (xhigh for security-critical work — slower). Fable reviews see farther but miss more small intricacies; there is no rule that the reviewer must be a different lab than the implementer.
+- Code review: two reviewers in parallel, consolidated by the orchestrator: gpt-5.6-sol plus fable-5, high for per-ticket rounds, xhigh for spec-level rounds. Sol reproduces findings by executing probes; fable finds structural issues by reading; each catches what the other misses. Budget fallback: gpt-5.6-sol at high alone. There is no rule that a reviewer must be a different lab than the implementer.
 - Never Haiku.
+- Plain `claude-fable-5` (no suffix) is the short-context variant that auto-compacts mid-task; use it only when boundary compaction (HERDR-OPS.md) is not worth the babysitting.
 
 ## Effort
 
