@@ -41,7 +41,7 @@ Discover, then propose from what exists:
 Read the argument. The invocation usually states most of the plan. Apply what it states and chart only what it leaves open:
 
 - **Integration mode.** **Single-PR** is the default for a parent spec with sub-issues: one integration branch you own, every issue merged into it, one draft PR that closes the spec and its tickets. **Spine** builds a stacked-PR chain instead; propose it when the user wants incremental merges or ticket-sized human review. **Independent** sends each branch straight to the default branch; for unrelated issues.
-- **Review dosage.** Per-ticket rounds run only when the invocation asks for them: 1 round when it asks without a number. The **spec review** at the end is standard: up to 2 rounds against the whole spec diff. Both knobs are overridable.
+- **Review dosage.** Per-ticket rounds run only when the invocation asks for them: 1 round when it asks without a number. The **spec review** at the end is standard: 2 rounds against the whole spec diff, always both. Both knobs are overridable.
 - Anything unusual: carry your interpretation into the approval pause; ask earlier only when no safe plan can be charted without the answer.
 
 Build the dependency DAG from the tracker's **native blocking relations**. If issue bodies also carry a dependency convention, compare; report any disagreement at the pause instead of silently picking a side. The DAG defines the **frontier** of runnable issues.
@@ -102,10 +102,10 @@ You run the same steps against the default branch: refresh it and, if it moved, 
 When every issue has joined, review the whole spec, then fix, without pausing for approval: the PR itself is the user's checkpoint, since nothing merges to the default branch without them.
 
 - The diff: in single-PR mode, the PR's base...HEAD. In spine mode, assemble it; when early tickets already merged into a moving default branch this is several contiguous ranges concatenated into one file in the run directory.
-- Run the review protocol against that diff, budget 2 rounds by default. Round 2 runs only when round 1 produced fixes; it goes in blind, carrying the new settled points.
+- Run the review protocol against that diff: 2 rounds by default, and round 2 runs even when round 1 was clean. It goes in blind, carrying the new settled points.
 - Fixes in single-PR mode: hand the consolidated findings to an implementer in a fresh worktree off the integration head, fixed-point discipline as always, and integrate its branch like any issue. In spine mode the fixes become one PR on top of the stack, never amendments to intermediate PRs, which would force rebases and CI runs up the whole train. A finding that breaks an intermediate PR's own mergeability is flagged in the report for push-down instead; that surgery is the user's call.
 
-When the spec review converges or its budget ends, mark the PR ready for review.
+When the spec-review rounds are done, mark the PR ready for review.
 
 ## Stuck issues
 
