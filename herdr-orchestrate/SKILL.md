@@ -33,8 +33,8 @@ Discover, then propose from what exists:
 1. Harnesses: which of `claude` and `codex` are installed and logged in.
 2. `gh` authenticated; the `gh stack` extension installed when spine mode is in play.
 3. The `herdr` skill installed. Load it before issuing Herdr control commands; it and the live CLI own command syntax. Then read [`HERDR-OPS.md`](HERDR-OPS.md) for this run's extra rules, before the first launch, not after something misbehaves.
-4. The repo's gates: its lint/typecheck/format/test commands and any test-runner caveats, from package scripts and the repo's agent docs.
-5. Read [`MODELS.md`](MODELS.md) for model choice; propose only models the installed harnesses actually offer.
+4. Read [`MODELS.md`](MODELS.md) for model choice; propose only models the installed harnesses actually offer.
+5. The `unslop` skill: when installed, apply it to everything the user will read (the pause message, PR bodies, the report).
 
 ## Chart
 
@@ -51,7 +51,7 @@ Then draft the run plan:
 - **Order**: spine mode needs one topological order of all issues, the bottom-to-top PR order; prefer fronting any externally time-critical track. Single-PR and independent modes integrate in completion order off the frontier.
 - **Wave width**: how many worktrees build concurrently (2-3 typical), or fully sequential.
 - **Cast**: per issue, implementer model + effort; the reviewer pair for the run. Choose per MODELS.md and say why for each non-default pick.
-- **Permission posture**: default auto/accept-edits with orchestrator-handled approvals; bypass only if the user says this machine is disposable.
+- **Permission posture**: no default; the pause asks the user to choose. Typical choices: yolo/bypass on a disposable machine, or auto mode with orchestrator-handled approvals (HERDR-OPS.md's blocked-pane policy). Accept-edits chains the orchestrator to approval babysitting; propose it only when the user wants that supervision.
 
 ## The pause
 

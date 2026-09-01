@@ -8,7 +8,7 @@ Transcripts scroll off and compact away; the run-directory files (see the skill)
 
 ## Harness quirks
 
-- Claude implementer args after `--`: `--model <model> --effort <level> --permission-mode acceptEdits`. If a start is blocked by a permission classifier, retry with a milder permission flag.
+- Claude implementer args after `--`: `--model <model> --effort <level> --permission-mode <posture agreed at the pause>`. If a start is blocked by a permission classifier, retry with a milder permission flag.
 - Pass Claude model IDs exactly as configured, including context-window suffixes: `--model claude-fable-5` overrides a `claude-fable-5[1m]` settings default and silently shrinks the window. Quote the brackets.
 - Codex args after `--`: `-c model_reasoning_effort=<level> -c approval_policy=never` (Codex has no effort flag; the `-c` config is the way).
 - Codex invokes skills with a `$` prefix (`$code-review`, `$tdd`), not `/`. The convention has changed before; if `$` misfires, read the pane for what Codex currently accepts.
