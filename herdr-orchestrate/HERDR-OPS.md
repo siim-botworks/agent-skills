@@ -4,7 +4,7 @@ Policy layered on the installed `herdr` skill. Load that skill first; it and the
 
 ## Durable artifacts
 
-Transcripts scroll off and compact away; the run-directory files (see the skill) are what arbitration and resumption stand on. When a pane's output is unrecoverable, ask the agent to write its answer to a run-directory file and record the path in `state.md`.
+Transcripts scroll off and compact away; the run-directory files (see the skill) are what arbitration and resumption stand on. Implementers end every task with a completion note in the run directory (BRIEF-TEMPLATE.md), so read results from files, not scrollback; when any other pane's output is unrecoverable, ask that agent to write its answer to a run-directory file and record the path in `state.md`.
 
 ## Harness quirks
 
@@ -13,7 +13,7 @@ Transcripts scroll off and compact away; the run-directory files (see the skill)
 - Codex args after `--`: `-c model_reasoning_effort=<level> -c approval_policy=never` (Codex has no effort flag; the `-c` config is the way).
 - Codex invokes skills with a `$` prefix (`$code-review`, `$tdd`), not `/`. The convention has changed before; if `$` misfires, read the pane for what Codex currently accepts.
 - Some harness environments hold back subagent use unless the prompt authorizes it. Every brief and reviewer prompt authorizes subagents explicitly, and reviewer independence is phrased as "one of two independent reviewers", a wording that keeps subagents available.
-- Prompt long briefs as a file path the agent reads. Reviewer prompts are the exception: short enough to send inline.
+- Send prompts inline; hand anything long (a consolidated findings file, an assembled diff) as a file path the agent reads.
 
 ## Compaction
 
