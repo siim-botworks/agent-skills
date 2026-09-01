@@ -41,7 +41,7 @@ Discover, then propose from what exists:
 Read the argument. The invocation usually states most of the plan. Apply what it states and chart only what it leaves open:
 
 - **Integration mode.** **Single-PR** is the default for a parent spec with sub-issues: one integration branch you own, every issue merged into it, one draft PR that closes the spec and its tickets. **Spine** builds a stacked-PR chain instead; propose it when the user wants incremental merges or ticket-sized human review. **Independent** sends each branch straight to the default branch; for unrelated issues.
-- **Review dosage.** Per-ticket rounds run only when the invocation asks for them: 1 round when it asks without a number. The **spec review** at the end is standard: 2 rounds against the whole spec diff, always both. Both knobs are overridable.
+- **Review dosage.** Per-ticket rounds run only when the invocation asks for them: 1 round when it asks without a number. The **spec review** at the end is standard: 2 rounds against the whole spec diff, and round 2 runs even after a clean round 1. Both knobs are overridable.
 - Anything unusual: carry your interpretation into the approval pause; ask earlier only when no safe plan can be charted without the answer.
 
 Build the dependency DAG from the tracker's **native blocking relations**. If issue bodies also carry a dependency convention, compare; report any disagreement at the pause instead of silently picking a side. The DAG defines the **frontier** of runnable issues.
