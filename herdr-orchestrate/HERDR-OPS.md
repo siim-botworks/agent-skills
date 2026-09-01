@@ -8,9 +8,9 @@ Transcripts scroll off and compact away; the run-directory files (see the skill)
 
 ## Harness quirks
 
-- Claude implementer args after `--`: `--model <model> --effort <level> --permission-mode <posture agreed at the pause>`. If a start is blocked by a permission classifier, retry with a milder permission flag.
+- Claude args after `--`: `--model <model> --effort <level>` plus the agreed posture: `--permission-mode bypassPermissions` (yolo) or `--permission-mode acceptEdits` (auto, orchestrator handles the remaining prompts). If a start is blocked by a permission classifier, retry with a milder permission flag.
 - Pass Claude model IDs exactly as configured, including context-window suffixes: `--model claude-fable-5` overrides a `claude-fable-5[1m]` settings default and silently shrinks the window. Quote the brackets.
-- Codex args after `--`: `-c model_reasoning_effort=<level> -c approval_policy=never` (Codex has no effort flag; the `-c` config is the way).
+- Codex args after `--`: `-c model_reasoning_effort=<level>` plus the agreed posture: `-c approval_policy=never -c sandbox_mode=danger-full-access` (yolo) or `-c approval_policy=on-request` (auto). Codex has no effort flag; the `-c` config is the way.
 - Codex invokes skills with a `$` prefix (`$code-review`, `$tdd`), not `/`. The convention has changed before; if `$` misfires, read the pane for what Codex currently accepts.
 - Some harness environments hold back subagent use unless the prompt authorizes it. Every brief and reviewer prompt authorizes subagents explicitly, and reviewer independence is phrased as "one of two independent reviewers", a wording that keeps subagents available.
 - Send prompts inline; hand anything long (a consolidated findings file, an assembled diff) as a file path the agent reads.
@@ -32,4 +32,4 @@ A reviewer pane may be reused; the reviewer *session* may not. Start a new conve
 When an agent goes `blocked`, read the exact visible prompt before acting; never assume which key means what:
 
 - Reads of run-directory files, ordinary dev commands, test runs inside the worktree: approve, preferring a "don't ask again this session" option when the prompt offers one.
-- Destructive or outward-facing actions (deletes outside the worktree, pushes not yet earned by an integration instruction, network posts): leave blocked, log it, surface it to the human or make an executive call per the skill.
+- Destructive or outward-facing actions (deletes outside the worktree, pushes not yet earned by an integration instruction, network posts): leave blocked, log it, surface it to the human. Executive calls do not cover these.

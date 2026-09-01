@@ -1,6 +1,6 @@
 # Model selection for orchestrated work
 
-Opinionated rankings by the repo owner — edit to your own experience. Higher = better on every axis: a high cost score means the model is *cheap* for the owner (it reflects what the owner actually pays, not list price). Intelligence is how hard a problem the model completes unsupervised. Taste covers UI/UX, code quality, API design, and copy.
+Opinionated rankings maintained by the repo owner between runs (a run does not modify the skill package). Higher = better on every axis: a high cost score means the model is *cheap* for the owner (it reflects what the owner actually pays, not list price). Intelligence is how hard a problem the model completes unsupervised. Taste covers UI/UX, code quality, API design, and copy.
 
 | model       | cost | intelligence | taste | native harness |
 | ----------- | ---- | ------------ | ----- | -------------- |
