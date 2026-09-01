@@ -17,7 +17,7 @@ Transcripts scroll off and compact away; the run-directory files (see the skill)
 
 ## Compaction
 
-Codex implementers are never compacted; Codex holds up well at depth. Claude implementers run the long-context model variant and compact at work boundaries: compact a deep-context agent before handing it a findings file or a new task, and send mechanical instructions as-is. Boundary compaction loses almost nothing because the durable state lives in the run directory and the committed diff. An agent mid-compaction reports `working`; wait for idle before prompting, or the prompt queues behind the compaction.
+Codex implementers are never compacted; Codex holds up well at depth. Claude implementers default to the long-context model variant (MODELS.md documents the short-context fallback) and compact at work boundaries: compact a deep-context agent before handing it a findings file or a new task, and send mechanical instructions as-is. Boundary compaction loses almost nothing because the durable state lives in the run directory and the committed diff. An agent mid-compaction reports `working`; wait for idle before prompting, or the prompt queues behind the compaction.
 
 ## Timeouts are not transitions
 

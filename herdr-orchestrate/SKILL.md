@@ -11,16 +11,16 @@ You are the **orchestrator**: you chart the work, launch and arbitrate the agent
 Per-ticket review is opt-in; the spec review is standard (see Chart). Wherever a round runs, these rules apply:
 
 - **Fixed point**: immediately after creating a worktree, record the base **SHA**, not just the branch name. Every round diffs `fixed-point...HEAD`, so each reviewer sees the full change, not just the latest fixes.
-- **Dual blind reviewers**: each round runs two reviewers in parallel, one per lab when two harnesses are installed (MODELS.md owns the pairing). Each is a fresh harness conversation with no task history; a reused pane needs a verified context reset (HERDR-OPS.md). Reviewers are **blind**: they hear nothing about earlier rounds' fixes. The one exception is **settled points**: refutations substantial enough to promote, each carried as a one-line claim plus its reason, so a reviewer skips relitigating without seeing fix history.
+- **Dual blind reviewers**: each round runs two reviewers in parallel, one per lab when two harnesses are installed (MODELS.md owns the pairing). Each is a fresh harness conversation with no task history; a reused pane needs a verified context reset (HERDR-OPS.md). With one harness, or under the budget fallback in MODELS.md, run a single reviewer; consolidation then collapses to its one report. Reviewers are **blind**: they hear nothing about earlier rounds' fixes. The one exception is **settled points**: refutations you promote at consolidation because their written reason stands on its own, each carried as a one-line claim plus that reason, so a reviewer skips relitigating without seeing fix history. Record the settled set in `state.md`; it must survive a restart.
 - **One-liner prompts**: a reviewer prompt is a short skill invocation, never a brief file. The shape:
 
-  > /code-review the diff {fixed-point}..HEAD in this worktree: ticket #{N} of spec #{M}. Judge overall taste too. Settled: {points}. You are one of two independent reviewers; using your own subagents is fine and encouraged. Findings only, no code changes, numbered, severity-ordered, file:line refs, written to {run-dir}/review-{issue}-r{K}-{reviewer}.md, or the exact sentence "No findings."
+  > /code-review the diff {fixed-point}...HEAD in this worktree: ticket #{N} of spec #{M}. Judge overall taste too. Settled: {points}. You are one of two independent reviewers; using your own subagents is fine and encouraged. Findings only, no code changes, numbered, severity-ordered, file:line refs, written to {run-dir}/review-{issue}-r{K}-{reviewer}.md, or the exact sentence "No findings."
 
-  (`$code-review` in Codex.)
+  (`$code-review` in Codex.) For a spec round, swap the target: name the diff source (the PR's base...HEAD, or the assembled diff file's path), name spec #{M}, and write to `review-spec-r{K}-{reviewer}.md`; consolidation and dispositions use `review-spec-r{K}.md` and `disposition-spec-r{K}.md`.
 - **Consolidate**: merge the two reports into `review-{issue}-r{K}.md` yourself: dedupe, keep the higher severity, drop a re-raised settled point unless it brings a new argument, and flag direct reviewer disagreements for the implementer to arbitrate in writing.
 - **Fix/refute**: the implementer judges every consolidated finding; reviewer output is advice, not authority. It writes `disposition-{issue}-r{K}.md` with one FIX or REFUTE entry per finding: fix what is real; refute what is wrong, already handled, out of scope, or a deliberate tradeoff, with a written reason. A high-severity correctness or security finding is refuted only after checking the code path it names. Re-run gates after fixes, then commit the round.
 - **Converged**: a round changes no code. The worktree is clean and either both reviewers wrote "No findings." or every consolidated finding has a REFUTE entry and HEAD equals the round-start HEAD. Any FIX means another round, budget permitting. You arbitrate from the files and the SHAs, not from transcript memory.
-- **The round budget ends review, never the work**: the final round's findings still get dispositions and the issue proceeds. The report states what one more round would have examined.
+- **The round budget ends review, never the work**: the final round's findings still get dispositions, fixes, gates, and a commit; the issue is then treated as converged and proceeds, review exhausted. The report states what one more round would have examined.
 
 ## Guard
 
@@ -70,7 +70,7 @@ An issue becomes runnable when its implementation base is unambiguous. Single-PR
 1. `herdr worktree create` off that base, and record the fixed-point SHA.
 2. Start the implementer in the worktree pane, in its native harness with the agreed effort.
 3. Prompt it with a brief built from [`BRIEF-TEMPLATE.md`](BRIEF-TEMPLATE.md), a file path it reads, not pasted text.
-4. When it stops: verify the implementation is committed, the worktree clean, and the gates green. Without per-ticket review the issue is CONVERGED here. With it, loop per the review protocol: record round-start HEAD, start the fresh reviewer pair, consolidate, hand the implementer the consolidated path with "judge fix/refute into the disposition file, gates, commit", arbitrate from the files and HEADs, checkpoint `state.md`, repeat until converged or the budget ends.
+4. When it stops: verify the implementation is committed, the worktree clean, and the gates green. Without per-ticket review the issue is CONVERGED here. With it, loop per the review protocol: record round-start HEAD, start the fresh reviewer pair, consolidate, hand the implementer the consolidated path with "judge fix/refute into the disposition file, gates, commit", arbitrate from the files and HEADs, checkpoint `state.md`, repeat until converged or the budget ends; either way, record CONVERGED once gates are green and every finding has a disposition.
 
 **Compact before real work.** A claude implementer deep in context gets compacted before you hand it a findings file or a new task; mechanical instructions go to it as-is. Codex implementers are never compacted. HERDR-OPS.md has the details.
 
@@ -78,18 +78,22 @@ An issue becomes runnable when its implementation base is unambiguous. Single-PR
 
 ## Integrate (single-PR mode)
 
-Create the integration branch off the default branch at run start and keep it in its own worktree. When the first issue converges, push and open a **draft PR** marked as closing the spec and its tickets. The PR is the user's window on the train; its body accumulates every "Decisions made without the owner" entry as issues land. Then, per converged issue, you run:
+Create the integration branch off the default branch at run start and keep it in its own worktree. Per converged issue, you run:
 
 1. Merge the issue branch into the integration branch. A merge, not a rebase, so the issue branch and its worktree stay valid.
-2. On conflict: abort, then have the implementer merge the current integration head into its issue branch in its own worktree, resolve, run gates, commit. The resolution gets one review round when the run reviews per ticket. Your merge then replays clean.
+2. On conflict: abort, then have the implementer merge the current integration head into its issue branch in its own worktree, resolve, run gates, commit. When the run reviews per ticket, the resolution gets one review round whose fixed point is the merged-in integration head, so the reviewer sees the resolution, not the whole branch. Your merge then replays clean.
 3. Full gates on the integration branch, push, record JOINED.
+
+After the first merge lands, open a **draft PR** for the integration branch, marked as closing the spec and its tickets. The PR is the user's window on the train; its body accumulates every "Decisions made without the owner" entry as issues land. Before marking it ready, prune closing keywords for any ticket that ended BLOCKED or excluded.
+
+A gate failure on an integration result without a Git conflict gets the same treatment as a conflict, in every mode: hand it to the issue's implementer with the failure output; it fixes on its branch, and you re-integrate.
 
 ## Join (spine mode)
 
 A converged branch joins only when everything below it in the spine has joined. You run the steps directly:
 
 1. Rebase only the issue's own commits: `git rebase --onto <stack-tip> <fixed-point> <branch>`. Never let Git infer the replay boundary, or it can replay the dependency's commits.
-2. On conflict, the issue's implementer resolves; the resolution gets one review round when the run reviews per ticket. The implementation fixed point stays untouched in `state.md`; it remains the `--onto` replay boundary.
+2. On conflict, the issue's implementer resolves. When the run reviews per ticket, the resolution gets one review round whose fixed point is the new base (the stack tip rebased onto). The implementation fixed point stays untouched in `state.md`; it remains the `--onto` replay boundary.
 3. Full gates on the rebased head.
 4. Push `--force-with-lease`; open the PR based on the previous stack-tip branch (default branch for the bottom PR); `gh stack link` it (the `gh-stack` skill, if installed, owns the mechanics). Verify from `gh` output that the remote head equals the validated SHA, the PR base is the immediate lower branch, and stack membership and order match the approved spine. Record JOINED; the tip advances.
 
@@ -99,7 +103,7 @@ You run the same steps against the default branch: refresh it and, if it moved, 
 
 ## Spec review
 
-When every issue has joined, review the whole spec, then fix, without pausing for approval: the PR itself is the user's checkpoint, since nothing merges to the default branch without them.
+Single-PR and spine modes end with a spec review; independent mode has no spec and skips this section. When every unblocked issue has joined, review the whole spec, then fix, without pausing for approval: the PR itself is the user's checkpoint, since nothing merges to the default branch without them.
 
 - The diff: in single-PR mode, the PR's base...HEAD. In spine mode, assemble it; when early tickets already merged into a moving default branch this is several contiguous ranges concatenated into one file in the run directory.
 - Run the review protocol against that diff: 2 rounds by default, and round 2 runs even when round 1 was clean. It goes in blind, carrying the new settled points.
@@ -109,7 +113,7 @@ When the spec-review rounds are done, mark the PR ready for review.
 
 ## Stuck issues
 
-Only a genuine wedge blocks an issue: a fork expensive to reverse in both directions, or an unrecoverable failure. Review rounds never block; the budget ends them. A BLOCKED issue and every issue reachable from it in the DAG are excluded; unrelated issues still integrate. When exclusions break a spine, stop at the highest joinable prefix and say so. Leave stuck worktrees intact.
+Only a genuine wedge blocks an issue: a fork expensive to reverse in both directions, or an unrecoverable failure. Review rounds never block; the budget ends them. A BLOCKED issue and every issue reachable from it in the DAG are excluded; record each excluded issue BLOCKED too, naming the upstream blocker as its cause. Unrelated issues still integrate. When exclusions break a spine, stop at the highest joinable prefix and say so. Leave stuck worktrees intact.
 
 ## Educated calls
 
@@ -119,6 +123,6 @@ You hold the same license: when an implementer wedges itself on a stalled judgme
 
 ## Report
 
-The run terminates when every planned issue is JOINED, OPEN, or BLOCKED, the spec review is done, and the report is delivered. A blocked entry names the exact blocker and the next recovery action. The run succeeded only if every issue is JOINED or OPEN; say which of the two you are reporting.
+The run terminates when every planned issue is JOINED, OPEN, or BLOCKED, the spec review is done (in the modes that have one), and the report is delivered. A blocked entry names the exact blocker and the next recovery action. The run succeeded only if every issue is JOINED or OPEN; say which of the two you are reporting.
 
 The report lists: the PR, or PRs in spine order with the recommended merge order; review rounds per issue with fixed/refuted counts; the spec-review rounds, their dispositions, and what one more round would have examined; every educated and executive call; every human intervention; every blocked issue with its downstream exclusions.
