@@ -51,7 +51,7 @@ Then draft the run plan:
 - **Order**: spine mode needs one topological order of all issues, the bottom-to-top PR order; prefer fronting any externally time-critical track. Single-PR and independent modes integrate in completion order off the frontier.
 - **Wave width**: how many worktrees build concurrently (2-3 typical), or fully sequential.
 - **Cast**: per issue, implementer model + effort; the reviewer pair for the run. Choose per MODELS.md and say why for each non-default pick.
-- **Permission posture**: no default; the pause asks the user to choose. Typical choices: yolo/bypass on a disposable machine, or auto mode with orchestrator-handled approvals (HERDR-OPS.md's blocked-pane policy). Accept-edits chains the orchestrator to approval babysitting; propose it only when the user wants that supervision.
+- **Permission posture**: the pause asks the user to choose: yolo/bypass on a disposable machine, or auto mode with orchestrator-handled approvals (HERDR-OPS.md's blocked-pane policy).
 
 ## The pause
 
